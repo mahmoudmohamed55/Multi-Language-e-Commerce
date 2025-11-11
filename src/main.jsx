@@ -5,7 +5,8 @@ import App from "./App";
 import { ThemeContextProvider } from "./Context/Theme/ThemeContext";
 import "./i18n";
 import { BrowserRouter } from "react-router";
-import { AuthProvider } from "./Context/AuthContext";
+import { AuthProvider } from "./Context/Auth/AuthContext";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>

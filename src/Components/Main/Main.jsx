@@ -38,6 +38,8 @@ export default function Main() {
       } else {
         setProducts(data);
       }
+     
+      
     };
 
     fetchProducts();
@@ -159,15 +161,22 @@ export default function Main() {
                 }}
               >
                 <Button
-                  sx={{ display: "flex", alignItems: "center" }}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    ":hover": {
+                      backgroundColor: "primary.main",
+                      color: "white",
+                    },
+                  }}
                   size="small"
+                  variant="outlined"
                   onClick={() => {
                     setSelectedProduct(item);
                     setOpen(true);
                   }}
                 >
-                  <AddShoppingCartOutlined sx={{ mr: 1 }} />
-                  {t("Add to cart")}
+                  {t("Details")}
                 </Button>
               </CardActions>
             </Card>

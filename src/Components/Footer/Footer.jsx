@@ -17,7 +17,7 @@ export default function Footer() {
         alignItems={{ xs: "flex-start", sm: "center" }}
         spacing={2}
         sx={{
-          py: 2,
+          py: 5,
           borderBlock: "1px solid #777",
           px: {
             xs: 2,
@@ -48,7 +48,7 @@ export default function Footer() {
           </LinkRouter>
           <LinkRouter
             style={{ textDecoration: "none", color: "inherit" }}
-            to="/"
+            to="/orders"
           >
             <Typography variant="body1" component={"span"} mx={1}>
               {t("myOrders")}
@@ -56,7 +56,7 @@ export default function Footer() {
           </LinkRouter>
           <LinkRouter
             style={{ textDecoration: "none", color: "inherit" }}
-            to="/"
+            to="/cart"
           >
             <Typography variant="body1" component={"span"} mx={1}>
               {t("cart")}
@@ -67,7 +67,17 @@ export default function Footer() {
           <Typography variant="h5" component={"span"} mx={1}>
             {t("followUs")}
           </Typography>
-          <Stack direction={"row"} alignItems={"center"} spacing={2}>
+          <Stack
+            sx={{
+              mt: {
+                xs: 2,
+                sm: 0,
+              },
+            }}
+            direction={"row"}
+            alignItems={"center"}
+            spacing={2}
+          >
             <a style={{ color: "inherit" }} href="#">
               <Facebook sx={{ ":hover": { color: "#1877f2" } }} />
             </a>

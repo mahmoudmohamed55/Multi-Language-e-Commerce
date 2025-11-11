@@ -59,7 +59,11 @@
 
   "Product Image": "Product Image",
   "product": {
-    "buyNow": "Buy now"
+    "buyNow": "Buy Now",
+    "errorAdding": "Something went wrong while adding product",
+    "alreadyInCart": "Product already in cart",
+    "addedToCart": "Product added to cart successfully",
+    "currency": "EGP"
   },
   "حاسوب محمول Dell XPS 13": "Dell XPS 13 Laptop",
   "لابتوب بمعالج i7 وذاكرة 16GB RAM": "Laptop with i7 processor and 16GB RAM",
@@ -106,5 +110,103 @@
   "homePage": "Home Page",
   "myOrders": "My Orders",
   "cart": "Cart",
-  "followUs": "Follow Us"
+  "followUs": "Follow Us",
+  "Details": "Details",
+  "cartTitle": "🛒 Shopping Cart",
+  "emptyCart": "No products in the cart yet 😢",
+  "delete": "Delete",
+  "confirmDeleteTitle": "Are you sure you want to remove this product from the cart?",
+  "confirmYes": "Yes",
+  "confirmNo": "No",
+  "totalPrice": "Total Price:",
+  "currency": "EGP",
+  "removeSuccess": "Product removed from cart successfully!",
+
+  "header": {
+    "searchPlaceholder": "Search...",
+    "nameUpdated": "Name updated successfully",
+    "updateFailed": "Failed to update name",
+    "user": "User",
+    "editProfile": "Edit Profile",
+    "adminDashboard": "Admin Dashboard",
+    "logout": "Logout",
+    "updateDisplayName": "You can update your display name below:",
+    "name": "Name",
+    "nameRequired": "Name is required",
+    "cancel": "Cancel",
+    "update": "Update"
+  },
+  "orders": {
+    "hello": "Hello",
+    "email": "Your Email",
+    "noOrders": "No orders found",
+    "yourOrders": "Your Orders",
+    "orderId": "Order ID",
+
+    "total": "Total",
+    "user-id": "User ID",
+    "status": "Status",
+    "actions": "Actions"
+  },
+
+  "completeOrder": "Complete Order",
+  "headers": {
+    "admin_dashboard": "Admin Dashboard",
+    "products_management": "Products Management",
+    "users_management": "Users Management",
+    "orders_management": "Orders Management",
+    "product_image": "Product Image"
+  },
+  "tabs": {
+    "products": "Products",
+    "users": "Users",
+    "orders": "Orders"
+  },
+  "form": {
+    "name": "Name",
+    "price": "Price",
+    "image_url": "Image URL",
+    "description": "Description",
+    "role": "Role",
+    "select_role": "Select user role",
+    "status": "Status",
+    "select_status": "Select order status"
+  },
+  "buttons": {
+    "add_product": "Add Product",
+    "edit_product": "Edit Product",
+    "edit_user": "Edit User",
+    "edit_order": "Edit Order",
+    "edit": "Edit",
+    "confirm_delete": "Confirm"
+  },
+  "alert": {
+    "error": "Error",
+    "success": "Success",
+    "fill_all_fields": "Please fill all fields",
+    "product_added": "Product added successfully",
+    "product_deleted": "Product deleted successfully",
+    "product_updated": "Product updated successfully",
+    "user_updated": "User updated successfully",
+    "confirm_delete_title": "Are you sure?",
+    "confirm_delete_text": "This action cannot be undone!"
+  },
+  "user": "User",
+  "admin": "Admin",
+  "pending": "Pending",
+  "paid": "Paid",
+  "cancelled": "Cancelled",
+ 
+     "errors": {
+    "403": {
+      "message": "Oops, you do not have permission to access this page."
+    },
+    "404": {
+      "message": "Sorry, the page you are looking for was not found."
+    }
+  },
+
+    "go_home": "Go Home"
+
+
 }

@@ -18,6 +18,7 @@ import {
   Button,
   useMediaQuery,
   Box,
+  TextField,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -26,9 +27,15 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
 import { Link, useNavigate } from "react-router";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../Context/Auth/AuthContext";
 import logoLight from "../../images/Logo.png";
 import logoDark from "../../images/Free.png";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Swal from "sweetalert2";
 
 const Search = styled("div")(({ theme }) => ({
   display: "flex",
@@ -72,10 +79,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
-    right: -3,
+    right: 0,
     top: 13,
     border: `2px solid ${theme.palette.background.paper}`,
     padding: "0 4px",
+    backgroundColor: theme.palette.primary.main,
+    color: "white",
   },
 }));
 
@@ -85,16 +94,26 @@ export default function Header2() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  console.log(user);
-  
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const [role, setRole] = useState(null);
+  let [cartCount, setCartCount] = useState(0);
   const isWide = useMediaQuery("(min-width:700px)");
 
-  // القوائم
   const [categoryAnchorEl, setCategoryAnchorEl] = useState(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(options[0]);
-
+  const [userName, setUserName] = useState(null);
+  const [runSideEffect, setRunSideEffect] = useState(true);
   const openCategory = Boolean(categoryAnchorEl);
   const openProfile = Boolean(profileAnchorEl);
 
@@ -107,8 +126,10 @@ export default function Header2() {
   };
   const handleClickProfile = (event) => setProfileAnchorEl(event.currentTarget);
   const handleCloseProfile = () => setProfileAnchorEl(null);
+
   useEffect(() => {
     if (!user) return setRole(null);
+
     let getRole = async () => {
       try {
         const { data, error } = await supabase
@@ -125,7 +146,49 @@ export default function Header2() {
     if (user) {
       getRole();
     }
+  }, [user, runSideEffect]);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (!user) return setCartCount(0);
+      const { count, error } = await supabase
+        .from("cart")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      if (!error) setCartCount(count || 0);
+    };
+    fetchCartCount();
   }, [user]);
+
+  const handleUpdateUserName = async () => {
+    if (!user) return;
+    if (userName === "") return;
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { full_name: userName },
+      });
+
+      if (error) throw error;
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: t("header.nameUpdated"),
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setRunSideEffect(!runSideEffect);
+      setOpen(false);
+    } catch (err) {
+      console.error("Error updating name:", err.message);
+      Swal.fire({
+        icon: "error",
+        title: t("header.updateFailed"),
+        text: err.message,
+      });
+    }
+  };
+
   return (
     <Container
       sx={{
@@ -137,7 +200,6 @@ export default function Header2() {
         gap: isWide ? 0 : 2,
       }}
     >
-      {/* الشعار */}
       <Box sx={{ textAlign: "center" }}>
         <Link
           to="/"
@@ -158,14 +220,13 @@ export default function Header2() {
         </Link>
       </Box>
 
-      {/* البحث فقط على الشاشات الواسعة */}
       {user && isWide && (
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
-            placeholder={t("Search...")}
+            placeholder={t("header.searchPlaceholder")}
             inputProps={{ "aria-label": "search" }}
           />
           <List
@@ -223,22 +284,31 @@ export default function Header2() {
         </Search>
       )}
 
-      {/* الأيقونات + الأزرار */}
       <Stack
         direction={isWide ? "row" : "row"}
         gap={1.5}
         alignItems="center"
         justifyContent="center"
       >
-        <IconButton aria-label="cart">
-          <StyledBadge badgeContent={2} color="primary">
-            <ShoppingCart />
+        <Link to="/cart" aria-label="cart">
+          <StyledBadge
+            badgeContent={cartCount}
+            color="secondary"
+            showZero={false}
+          >
+            <ShoppingCart
+              sx={{
+                color:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.common.white
+                    : theme.palette.common.black,
+              }}
+            />
           </StyledBadge>
-        </IconButton>
+        </Link>
 
         {user && (
           <div>
-            {" "}
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -247,10 +317,8 @@ export default function Header2() {
               onClick={handleClickProfile}
               color="inherit"
             >
-              {" "}
-              <AccountCircle />{" "}
-            </IconButton>{" "}
-            {/* القائمة الخاصة بالبروفايل */}{" "}
+              <AccountCircle />
+            </IconButton>
             <Menu
               id="profile-menu"
               anchorEl={profileAnchorEl}
@@ -259,13 +327,16 @@ export default function Header2() {
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              {" "}
               <MenuItem onClick={handleCloseProfile}>
-                {" "}
-                {user.user_metadata.full_name}{" "}
-              </MenuItem>{" "}
-              <MenuItem onClick={handleCloseProfile}>My account</MenuItem>{" "}
-            </Menu>{" "}
+                {user.user_metadata?.full_name || t("header.user")}
+              </MenuItem>
+              <MenuItem onClick={handleClickOpen}>
+                {t("header.editProfile")}
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/orders")}>
+                {t("orders.yourOrders")}
+              </MenuItem>
+            </Menu>
           </div>
         )}
 
@@ -284,7 +355,7 @@ export default function Header2() {
             }}
             onClick={() => navigate("/admin")}
           >
-            {t("Admin Dashboard")}
+            {t("header.adminDashboard")}
           </Typography>
         )}
 
@@ -303,7 +374,7 @@ export default function Header2() {
             }}
             onClick={() => supabase.auth.signOut()}
           >
-            {t("Logout")}
+            {t("header.logout")}
           </Typography>
         )}
 
@@ -321,29 +392,51 @@ export default function Header2() {
                 color: "primary.main",
                 ":hover": { backgroundColor: "primary.main", color: "white" },
               }}
-              onClick={() => navigate("/register")}
-            >
-              {t("Register")}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                border: "1px solid",
-                borderColor: "primary.main",
-                px: 1.5,
-                py: 0.5,
-                borderRadius: "8px",
-                cursor: "pointer",
-                color: "primary.main",
-                ":hover": { backgroundColor: "primary.main", color: "white" },
-              }}
               onClick={() => navigate("/login")}
             >
-              {t("Login")}
+              {t("register.login")}
             </Typography>
           </>
         )}
       </Stack>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {t("header.editProfile")}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {t("header.updateDisplayName")}
+          </DialogContentText>
+
+          <TextField
+            fullWidth
+            margin="dense"
+            label={t("header.name")}
+            value={userName ?? user?.user_metadata?.full_name ?? ""}
+            onChange={(e) => setUserName(e.target.value)}
+            error={userName === ""}
+            helperText={userName === "" ? t("header.nameRequired") : ""}
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleClose} color="error">
+            {t("header.cancel")}
+          </Button>
+          <Button
+            onClick={handleUpdateUserName}
+            color="primary"
+            variant="contained"
+          >
+            {t("header.update")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
