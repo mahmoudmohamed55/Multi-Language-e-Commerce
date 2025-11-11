@@ -28,13 +28,13 @@ export default function Hero() {
       textKey: "Lifestyle Collection",
       saleKey: "Sale Up To",
       off: "50%",
-      img: "src/images/banner-15.jpg",
+      img: "https://github.com/alielrayes/t-shirts/blob/react-ecomerce-dev-ali-youtube-channel/banner-15.jpg",
     },
     {
       textKey: "Lifestyle Collection",
       saleKey: "Sale Up To",
       off: "30%",
-      img: "src/images/banner-15.jpg",
+      img: "https://github.com/alielrayes/t-shirts/blob/react-ecomerce-dev-ali-youtube-channel/banner-15.jpg",
     },
   ];
 
