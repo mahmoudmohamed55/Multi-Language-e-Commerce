@@ -372,7 +372,10 @@ export default function Header2() {
               color: "error.main",
               ":hover": { backgroundColor: "error.main", color: "white" },
             }}
-            onClick={() => supabase.auth.signOut()}
+            onClick={() => {
+              supabase.auth.signOut();
+              navigate("/");
+            }}
           >
             {t("header.logout")}
           </Typography>
