@@ -20,6 +20,7 @@ const cacheRtl = createCache({
   stylisPlugins: [prefixer, rtlPlugin],
 });
 
+
 export const ThemeContextProvider = ({ children }) => {
 
   const [mode, setMode] = useState(localStorage.getItem("mode") || "light");

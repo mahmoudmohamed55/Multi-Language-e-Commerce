@@ -27,7 +27,7 @@ const ProductDetails = ({ product }) => {
         throw checkError;
       }
 
-      // 🛒 المنتج موجود بالفعل في العربة
+      
       if (existingItem) {
         Swal.fire({
           position: "top-end",

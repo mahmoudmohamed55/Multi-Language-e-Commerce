@@ -75,7 +75,7 @@ export default function AdminDashboard() {
     image_url: "",
   });
 
-  let [setAccept] = useState(false);
+  let [accept, setAccept] = useState(false);
 
   const [editProduct, setEditProduct] = useState(null);
   const [editOrder, setEditOrder] = useState(null);
